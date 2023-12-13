@@ -1,5 +1,13 @@
 # Osimis Web Viewer
 
+## Warning
+
+The Osimis Web viewer is deprecated and superseded by the [Stone Web viewer](https://orthanc.uclouvain.be/book/plugins/stone-webviewer.html).
+
+As of 1.4.2 the Osimis Web Viewer contains at least one known security vulnerability.
+
+## Description
+
 The [Osimis'](htpp://www.osimis.io/) Web Viewer provides medical image 
 visualization straight from the browser.
 
