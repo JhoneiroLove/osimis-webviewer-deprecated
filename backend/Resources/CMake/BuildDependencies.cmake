@@ -64,3 +64,12 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows" AND
   # For MinGW
   target_link_libraries(WebViewerDependencies wsock32)
 endif()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR
+    ${CMAKE_SYSTEM_NAME} STREQUAL "kFreeBSD" OR
+    ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD" OR
+    ${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--version-script=${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/Common/VersionScript.map")
+elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -exported_symbols_list ${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/Common/ExportedSymbols.list")
+endif()
