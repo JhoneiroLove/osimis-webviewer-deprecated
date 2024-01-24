@@ -5,9 +5,11 @@ Version 1.4.3
 
 Changes:
 -------
+
 * fix "SameSite" cookie warning.
 * internal: upgraded from AngularJS 1.7.0 to 1.7.9 (to fix the cookie issue)
-* fix an XSS vulnerability.
+* fix an XSS vulnerability, corresponding to CVE-2023-7238:
+  https://www.cisa.gov/news-events/ics-medical-advisories/icsma-24-023-01
 
 Version 1.4.2
 ========================
