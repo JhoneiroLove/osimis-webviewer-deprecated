@@ -2,7 +2,6 @@
 # Note that the include_directories command affects and is meant for every targets (including those outside of this .cmake file)
 
 ## Build dependencies
-
 include(CheckIncludeFiles)
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
@@ -10,9 +9,9 @@ include(FindPythonInterp)
 
 set(ENABLE_PLUGINS_VERSION_SCRIPT OFF)
 
-include(${ORTHANC_FRAMEWORK_ROOT}/../Resources/CMake/Compiler.cmake)
+include(${ORTHANC_ROOT}/Resources/CMake/Compiler.cmake)
 include(${RESOURCES_DIR}/CMake/GdcmConfiguration.cmake)
-include(${ORTHANC_FRAMEWORK_ROOT}/../Resources/CMake/GoogleTestConfiguration.cmake)
+include(${ORTHANC_ROOT}/Resources/CMake/GoogleTestConfiguration.cmake)
 
 ## Check that the Orthanc SDK headers are available or download them
 if (STATIC_BUILD OR NOT USE_SYSTEM_ORTHANC_SDK)
@@ -27,11 +26,10 @@ endif()
 ## Build dependencies which are not already considered as external libs (everything else from GCDM, cf. boost, JsonCpp and SQLite)
 add_library(WebViewerDependencies
   STATIC
-
-  # The following files depend on GDCM
-  ${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/GdcmDecoder/GdcmImageDecoder.cpp
-  ${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/GdcmDecoder/GdcmDecoderCache.cpp
-  ${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/GdcmDecoder/OrthancImageWrapper.cpp
+  # The following files depend on GDCM - using system GDCM instead
+  ${ORTHANC_ROOT}/Plugins/Samples/GdcmDecoder/GdcmImageDecoder.cpp
+  ${ORTHANC_ROOT}/Plugins/Samples/GdcmDecoder/GdcmDecoderCache.cpp
+  ${ORTHANC_ROOT}/Plugins/Samples/GdcmDecoder/OrthancImageWrapper.cpp
 )
 
 target_compile_definitions(WebViewerDependencies PUBLIC -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
@@ -69,7 +67,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR
     ${CMAKE_SYSTEM_NAME} STREQUAL "kFreeBSD" OR
     ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD" OR
     ${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--version-script=${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/Common/VersionScript.map")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--version-script=${ORTHANC_ROOT}/Plugins/Samples/Common/VersionScript.map")
 elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -exported_symbols_list ${ORTHANC_FRAMEWORK_ROOT}/../Plugins/Samples/Common/ExportedSymbols.list")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -exported_symbols_list ${ORTHANC_ROOT}/Plugins/Samples/Common/ExportedSymbols.list")
 endif()
