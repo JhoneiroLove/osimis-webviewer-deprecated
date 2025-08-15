@@ -66,6 +66,50 @@
         function link(scope, element, attrs, ctrls, transcludeFn) {
             var vm = scope.vm;
 
+            // --- iOS landscape scroll + relayout helper ---------------------------------
+            (function iosLandscapeHelper() {
+                // Detecta iOS (incluye iPadOS que se reporta como Mac con touch)
+                var ua = navigator.userAgent;
+                var isiPadOS = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                var isIOS = (wvConfig.browser && wvConfig.browser.os && wvConfig.browser.os.name === 'iOS') ||
+                    /iPad|iPhone|iPod/.test(ua) || isiPadOS;
+                if (!isIOS) return;
+
+                var rootEl = element[0]; // <wv-webviewer> host
+
+                function isLandscape() {
+                    return window.innerWidth > window.innerHeight;
+                }
+
+                function applyIOSLandscapeFix() {
+                    try {
+                        if (isLandscape()) {
+                            rootEl.classList.add('ios-scroll-container');
+                        } else {
+                            rootEl.classList.remove('ios-scroll-container');
+                        }
+                        // Re-layout del visor tras el giro para recalcular tamaños de canvas
+                        setTimeout(function () {
+                            // Cornerstone/splitpane suelen escuchar 'resize'
+                            if (window && window.dispatchEvent) {
+                                window.dispatchEvent(new Event('resize'));
+                            }
+                            if (typeof $ !== 'undefined' && $.fn) {
+                                $(window).trigger('resize');
+                            }
+                        }, 150);
+                    } catch (e) {
+                        // no-op
+                    }
+                }
+
+                // Aplica en arranque y ante cambios de orientación/resize
+                applyIOSLandscapeFix();
+                window.addEventListener('orientationchange', applyIOSLandscapeFix, { passive: true });
+                window.addEventListener('resize', applyIOSLandscapeFix, { passive: true });
+            })();
+            // ---------------------------------------------------------------------------
+
             { // Enhanced browser compatibility check - Safari/iOS support
                 var browserName = wvConfig.browser.browser.name;
                 var browserMajorVersion = wvConfig.browser.browser.major;
@@ -479,7 +523,7 @@
             });
 
             vm.studiesColors = {
-                blue: [],       
+                blue: [],
                 red: [],
                 green: [],
                 yellow: [],

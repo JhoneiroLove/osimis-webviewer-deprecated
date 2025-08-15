@@ -1,0 +1,58 @@
+// Fixes para iOS en horizontal + “gutter” de scroll
+@supports (-webkit-touch-callout: none) {
+    body.is-ios.is-landscape {
+        // Los contenedores del visor que deben scrollear
+        wv-layout-main,
+        wv-layout-left,
+        .ios-scroll-container {
+            height: 100dvh;
+            height: -webkit-fill-available; // fallback iOS viejos
+            min-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            overscroll-behavior-y: contain;
+        }
+        // El canvas del visor mantiene sus gestos (pan/zoom/windowing)
+        .wv-cornerstone-enabled-image {
+            touch-action: none;
+        }
+        // Safe areas (PWA / notch)
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        // Gutter vertical: zona para iniciar scroll cuando todo es canvas
+        .ios-scroll-gutter-vert {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 22px;
+            height: 100dvh;
+            z-index: 9999;
+            background: transparent;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+            pointer-events: auto;
+        }
+        // (Opcional) gutters superior e inferior
+        .ios-scroll-gutter-top,
+        .ios-scroll-gutter-bottom {
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 20px;
+            z-index: 9999;
+            background: transparent;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+            pointer-events: auto;
+        }
+
+        .ios-scroll-gutter-top {
+            top: 0;
+        }
+
+        .ios-scroll-gutter-bottom {
+            bottom: 0;
+        }
+    }
+}
